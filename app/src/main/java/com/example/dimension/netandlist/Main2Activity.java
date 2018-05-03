@@ -35,22 +35,27 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                     OkHttpClient okHttpClient=new OkHttpClient();
                     Request request;
                     Response response;
+
                     request=new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/cityintroduce.txt").build();
                     response = okHttpClient.newCall(request).execute();
                     String cityText=response.body().string();
                     show(cityText,1);
                     request=new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/total.txt").build();
-                    response = okHttpClient.newCall(request).execute();
+                    response= okHttpClient.newCall(request).execute();
                     int total=Integer.parseInt(response.body().string());
+                    Bitmap[] bitmaps=new Bitmap[total];
+                    Response[] responses=new Response[total];
                     for(int i=1;i<=total;i++){
                         request = new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/resources/pic_"+i+".jpg").build();
-                        response = okHttpClient.newCall(request).execute();
-                        byte[] pic = response.body().bytes();
+                        responses[i-1] = okHttpClient.newCall(request).execute();
+                        byte[] pic = responses[i-1].body().bytes();
                         Bitmap bitmap = BitmapFactory.decodeByteArray(pic, 0, pic.length);
-                        show(bitmap);
+                        bitmaps[i-1]=bitmap;
+
                     }
+                    show(bitmaps);
                     request=new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/foods.txt").build();
-                    response = okHttpClient.newCall(request).execute();
+                    response= okHttpClient.newCall(request).execute();
                     String foodText=response.body().string();
                     show(foodText,2);
                 }
@@ -61,18 +66,20 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             }
         }).start();
     };
-    private void show(final Bitmap bitmap)
+    private void show(final Bitmap[] bitmaps)
     {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LinearLayout linearLayout=(LinearLayout)Main2Activity.this.findViewById(R.id.MyTable);
-                ImageView imageView=new ImageView(Main2Activity.this);
-                imageView.setImageBitmap(bitmap);
-                LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.gravity= Gravity.CENTER_VERTICAL;
-                imageView.setLayoutParams(params);
-                linearLayout.addView(imageView);
+                for(Bitmap bitmap:bitmaps){
+                    LinearLayout linearLayout=(LinearLayout)Main2Activity.this.findViewById(R.id.MyTable);
+                    ImageView imageView=new ImageView(Main2Activity.this);
+                    imageView.setImageBitmap(bitmap);
+                    LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.gravity= Gravity.CENTER_VERTICAL;
+                    imageView.setLayoutParams(params);
+                    linearLayout.addView(imageView);
+                }
             }
         });
     }
