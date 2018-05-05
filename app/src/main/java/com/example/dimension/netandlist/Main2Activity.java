@@ -32,30 +32,22 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
                 try{
-                    OkHttpClient okHttpClient=new OkHttpClient();
-                    Request request;
-                    Response response;
-
-                    request=new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/cityintroduce.txt").build();
-                    response = okHttpClient.newCall(request).execute();
+                    Response response = new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/cityintroduce.txt");
                     String cityText=response.body().string();
                     show(cityText,1);
-                    request=new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/total.txt").build();
-                    response= okHttpClient.newCall(request).execute();
+                    response=new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/total.txt");
                     int total=Integer.parseInt(response.body().string());
                     Bitmap[] bitmaps=new Bitmap[total];
                     Response[] responses=new Response[total];
                     for(int i=1;i<=total;i++){
-                        request = new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/resources/pic_"+i+".jpg").build();
-                        responses[i-1] = okHttpClient.newCall(request).execute();
+                        responses[i-1] = new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/resources/pic_"+i+".jpg");
                         byte[] pic = responses[i-1].body().bytes();
                         Bitmap bitmap = BitmapFactory.decodeByteArray(pic, 0, pic.length);
                         bitmaps[i-1]=bitmap;
 
                     }
                     show(bitmaps);
-                    request=new Request.Builder().url("http://20753yi414.iask.in:53064/"+data+"/foods.txt").build();
-                    response= okHttpClient.newCall(request).execute();
+                    response= new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/foods.txt");
                     String foodText=response.body().string();
                     show(foodText,2);
                 }

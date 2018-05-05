@@ -28,13 +28,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void run() {
                 try{
-                    OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                            .connectTimeout(10, TimeUnit.SECONDS)
-                            .writeTimeout(10, TimeUnit.SECONDS)
-                            .readTimeout(30, TimeUnit.SECONDS)
-                            .build();
-                    Request request=new Request.Builder().url("http://20753yi414.iask.in:53064/getdata.json").build();
-                    Response response=okHttpClient.newCall(request).execute();
+                    Response response=new HttpResponseRequest().ReturnResponse("http://193.112.161.83/getdata.json");
                     String data=response.body().string();
                     parseJSONWithGSON(data);
 
@@ -53,7 +47,6 @@ public class MainActivity extends AppCompatActivity{
         ArrayList<String> arrayList=new ArrayList<>();
         for(gson gson1:gsonlist) {
             arrayList.add(gson1.getName());
-
         }
         String[] strings=new String[arrayList.size()];
         arrayList.toArray(strings);
