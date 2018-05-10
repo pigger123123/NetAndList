@@ -32,22 +32,22 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
                 try{
-                    Response response = new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/cityintroduce.txt");
+                    Response response = new HttpResponseRequest().ReturnResponse("http://10.0.2.2/"+data+"/cityintroduce.txt");
                     String cityText=response.body().string();
                     show(cityText,1);
-                    response=new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/total.txt");
+                    response=new HttpResponseRequest().ReturnResponse("http://10.0.2.2/"+data+"/total.txt");
                     int total=Integer.parseInt(response.body().string());
                     Bitmap[] bitmaps=new Bitmap[total];
                     Response[] responses=new Response[total];
                     for(int i=1;i<=total;i++){
-                        responses[i-1] = new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/resources/pic_"+i+".jpg");
+                        responses[i-1] = new HttpResponseRequest().ReturnResponse("http://10.0.2.2/"+data+"/resources/pic_"+i+".jpg");
                         byte[] pic = responses[i-1].body().bytes();
                         Bitmap bitmap = BitmapFactory.decodeByteArray(pic, 0, pic.length);
                         bitmaps[i-1]=bitmap;
 
                     }
                     show(bitmaps);
-                    response= new HttpResponseRequest().ReturnResponse("http://193.112.161.83/"+data+"/foods.txt");
+                    response= new HttpResponseRequest().ReturnResponse("http://10.0.2.2/"+data+"/foods.txt");
                     String foodText=response.body().string();
                     show(foodText,2);
                 }

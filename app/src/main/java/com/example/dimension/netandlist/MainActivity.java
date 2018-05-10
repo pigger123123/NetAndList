@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void run() {
                 try{
-                    Response response=new HttpResponseRequest().ReturnResponse("http://193.112.161.83/getdata.json");
+                    Response response=new HttpResponseRequest().ReturnResponse("http://10.0.2.2/getdata.json");
                     String data=response.body().string();
                     parseJSONWithGSON(data);
 
