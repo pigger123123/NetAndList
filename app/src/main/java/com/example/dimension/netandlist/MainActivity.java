@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity{
                     dataOfcity=response.body().string();
                     stringsOfcity=parseCityJSONWithGSON(dataOfcity);
                     stringsOfweather=new String[stringsOfcity.length];
-                    Log.d("da", "run: "+stringsOfcity.length);
                     for(int i=0;i<stringsOfcity.length;i++)
                     {
                         response= new HttpResponseRequest().ReturnResponse("https://free-api.heweather.com/s6/weather/now?location="+stringsOfcity[i]+"&key=da3302c1f5c444b9b963ef6d0851d31f");
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity{
                         Weather weather=parseWeatherJSONWithGSON(dataOfweather);
                         stringsOfweather[i]=weather.now.cond_txt+"  "+weather.now.tmp;
                         show(stringsOfcity,stringsOfweather);
-                        //Log.d("s", "run: "+ stringsOfcity[i]+"  "+stringsOfweather[i]);
                     }
 
                 }
@@ -103,10 +101,10 @@ public class MainActivity extends AppCompatActivity{
             public void run() {
                 ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,convert);
                 listView.setAdapter(adapter);
-               listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String data=stringsOfcity[listView.getCheckedItemCount()];
+                        String data=stringsOfcity[position];
                         Intent intent=new Intent(MainActivity.this,Main2Activity.class);
                         intent.putExtra("extra_data",data);
                         startActivity(intent);
