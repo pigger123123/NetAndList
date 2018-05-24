@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:textSize="20sp"
-            android:textColor="#fff"
+            android:textColor="#000000"
             android:background="@drawable/shape0"/>
     </ScrollView>
 </LinearLayout>

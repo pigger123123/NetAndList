@@ -10,7 +10,8 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:label="CityOverView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Main2Activity" />
+        <activity android:name=".Main3Activity" />
+        <activity android:name=".ImageActivity"></activity>
     </application>
 
 </manifest>
