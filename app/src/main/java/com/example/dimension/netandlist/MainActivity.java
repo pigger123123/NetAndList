@@ -27,10 +27,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity{
     private ListView listView;
-    public String dataOfcity;
-    public String dataOfweather;
-    public String[] stringsOfcity;
-    public String[] stringsOfweather;
+    final static String uri="http://20753yi414.iask.in:53064/";
     public void sendRequsetWithOkHttp()
     {
 
@@ -38,18 +35,9 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void run() {
                 try{
-                    Response response=new HttpResponseRequest().ReturnResponse("http://20753yi414.iask.in:53064/getdata.json");
-                    dataOfcity=response.body().string();
-                    stringsOfcity=parseCityJSONWithGSON(dataOfcity);
-                    stringsOfweather=new String[stringsOfcity.length];
-                    for(int i=0;i<stringsOfcity.length;i++)
-                    {
-                        response= new HttpResponseRequest().ReturnResponse("https://free-api.heweather.com/s6/weather/now?location="+stringsOfcity[i]+"&key=da3302c1f5c444b9b963ef6d0851d31f");
-                        dataOfweather=response.body().string();
-                        Weather weather=parseWeatherJSONWithGSON(dataOfweather);
-                        stringsOfweather[i]=weather.now.cond_txt+"  "+weather.now.tmp;
-                        show(stringsOfcity,stringsOfweather);
-                    }
+                    Response response=new HttpResponseRequest().ReturnResponse(uri+"getdata.json");
+                    String data=response.body().string();
+                    parseCityJSONWithGSON(data);
 
                 }
                 catch (Exception e)
@@ -62,7 +50,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
-    private String[] parseCityJSONWithGSON(String data)
+    private void parseCityJSONWithGSON(String data)
     {
         Gson gson=new Gson();
         List<gson> gsonlist=gson.fromJson(data,new TypeToken<List<gson>>(){}.getType());
@@ -72,39 +60,20 @@ public class MainActivity extends AppCompatActivity{
         }
         String[] strings=new String[arrayList.size()];
         arrayList.toArray(strings);
-        return strings;
+        show(strings);
     }
-    private static Weather parseWeatherJSONWithGSON(String data)
-    {
-        try{
-            JSONObject jsonObject=new JSONObject(data);
-            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather6");
-            String weatherContent=jsonArray.getJSONObject(0).toString();
-            Weather weather=new Gson().fromJson(weatherContent, Weather.class);
-            return weather;
 
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    private void show(final String[] stringsOfcity,final String[] stringsOfweather)
+    private void show(final String[] data)
     {
-        final String[] convert=new String[stringsOfcity.length];
-        for(int i=0;i<convert.length;i++)
-        {
-            convert[i]=stringsOfcity[i]+"   {天气情况："+stringsOfweather[i]+"℃}";
-        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,convert);
+                ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,data);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String data=stringsOfcity[position];
+                        String data=listView.getItemAtPosition(position).toString();
                         Intent intent=new Intent(MainActivity.this,Main2Activity.class);
                         intent.putExtra("extra_data",data);
                         startActivity(intent);
@@ -118,6 +87,13 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView=(ListView)findViewById(R.id.listView);
+        Button power=(Button)findViewById(R.id.power);
+        power.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         sendRequsetWithOkHttp();
     }
 

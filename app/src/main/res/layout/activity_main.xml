@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_2">
+    android:background="@drawable/bg_1">
     <include layout="@layout/title_first"></include>
 
     <ListView
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/shape"
+        android:background="@drawable/shape0"
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
