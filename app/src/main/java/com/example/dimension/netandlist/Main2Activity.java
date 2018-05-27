@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -23,16 +22,18 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 
 import okhttp3.Response;
-
+import weather.Weather;
+import weather.parseWeatherJson;
 public class Main2Activity extends AppCompatActivity implements View.OnClickListener {
     TextView cityText;
     TextView foodText;
     String data;
     TextView condTxt;
     TextView tmp;
+    ImageView Image;
     private static final int LevelCity = 1;
     private static final int LevelFood = 2;
-    final static String uri="http://20753yi414.iask.in:53064/city/";
+    final static String uri="http://10.0.2.2/city/";
 
     public void sendRequsetWithOkHttp() {
         new Thread(new Runnable() {
@@ -41,21 +42,27 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                 try {
                     Response response = new HttpResponseRequest().ReturnResponse("https://free-api.heweather.com/s6/weather/now?location=" + data + "&key=da3302c1f5c444b9b963ef6d0851d31f");
                     String weatherContent = response.body().string();
-                    Weather weather = parseWeatherJSONWithGSON(weatherContent);
-                    show(weather);
+                    Weather weather = new parseWeatherJson().parseWeatherJSONWithGSON(weatherContent);
+                    response=new HttpResponseRequest().ReturnResponse("http://10.0.2.2/cond_icon_heweather/"+weather.now.cond_code+".png");
+                    byte[] pic=response.body().bytes();
+                    Bitmap bitmap=BitmapFactory.decodeByteArray(pic,0,pic.length);
+                    show(weather,bitmap);
+
                     response = new HttpResponseRequest().ReturnResponse(uri + data + "/cityintroduce.txt");
                     String cityText = response.body().string();
                     show(cityText, LevelCity);
+
                     response = new HttpResponseRequest().ReturnResponse(uri + data + "/total.txt");
                     int total = Integer.parseInt(response.body().string());
                     Bitmap[] bitmaps = new Bitmap[total];
                     for (int i = 1; i <= total; i++) {
                         response = new HttpResponseRequest().ReturnResponse(uri + data + "/resources/pic_" + i + ".jpg");
-                        byte[] pic = response.body().bytes();
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(pic, 0, pic.length);
+                        pic = response.body().bytes();
+                        bitmap = BitmapFactory.decodeByteArray(pic, 0, pic.length);
                         bitmaps[i - 1] = bitmap;
                     }
                     show(bitmaps);
+
                     response = new HttpResponseRequest().ReturnResponse(uri + data + "/foods.txt");
                     String foodText = response.body().string();
                     show(foodText, LevelFood);
@@ -115,13 +122,15 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-    private void show(final Weather weather){
+    private void show(final Weather weather,final Bitmap bitmap){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
               try{
                 tmp.setText(weather.now.tmp+"℃");
-                condTxt.setText(weather.now.cond_txt);}
+                condTxt.setText(weather.now.cond_txt);
+                Image.setImageBitmap(bitmap);
+              }
                 catch (Exception e)
                 {
                     e.printStackTrace();
@@ -137,6 +146,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         data=intent.getStringExtra("extra_data");
         TextView textView=(TextView)findViewById(R.id.title_Text2);
         textView.setText(data);
+        Image=findViewById(R.id.Image);
         cityText=(TextView)findViewById(R.id.cityText);
         foodText=(TextView)findViewById(R.id.foodText);
         Button back=(Button)findViewById(R.id.back);
@@ -148,6 +158,8 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         settings.setOnClickListener(this);
         condTxt=(TextView)findViewById(R.id.condtxt);
         tmp=(TextView)findViewById(R.id.tmp);
+        RelativeLayout relativeLayout=(RelativeLayout)findViewById(R.id.layout_weather);
+        relativeLayout.setOnClickListener(this);
 
     }
 
@@ -171,21 +183,13 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
             }
             break;
+            case R.id.layout_weather:
+            {
+                Intent intent = new Intent(Main2Activity.this, WeatherActivity.class);
+                intent.putExtra("extra", data);
+                startActivity(intent);
+            }
         }
     }
-    private static Weather parseWeatherJSONWithGSON(String data)
-    {
-        try{
-            JSONObject jsonObject=new JSONObject(data);
-            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather6");
-            String weatherContent=jsonArray.getJSONObject(0).toString();
-            Weather weather=new Gson().fromJson(weatherContent, Weather.class);
-            return weather;
 
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

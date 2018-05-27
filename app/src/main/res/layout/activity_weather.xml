@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/title_weather"/>
+    <include layout="@layout/weather"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="体感温度："
+            android:textSize="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/weather_fl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="25dp"/>
+        <TextView
+            android:layout_below="@id/weather_fl"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="风向："/>
+        <TextView
+            android:layout_below="@id/weather_fl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="25dp"
+            android:id="@+id/weather_wind_dir"/>
+        <TextView
+            android:layout_below="@id/weather_wind_dir"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="风速："/>
+        <TextView
+            android:layout_below="@id/weather_wind_dir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="25dp"
+            android:id="@+id/weather_wind_spd"/>
+
+    </RelativeLayout>
+</LinearLayout>

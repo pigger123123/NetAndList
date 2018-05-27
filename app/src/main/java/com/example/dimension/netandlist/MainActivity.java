@@ -27,7 +27,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity{
     private ListView listView;
-    final static String uri="http://20753yi414.iask.in:53064/";
+    final static String uri="http://10.0.2.2/";
     public void sendRequsetWithOkHttp()
     {
 

@@ -1,4 +1,4 @@
-package com.example.dimension.netandlist;
+package weather;
 
 public class Now {
     public String cloud;
@@ -11,13 +11,10 @@ public class Now {
     public String pres;
     public String tmp;
     public String vis;
-    public Wind wind;
-    public class Wind
-    {
-        public String deg;
-        public String dir;
-        public String sc;
-        public String spd;
-    }
+    public String wind_deg;
+    public String wind_dir;
+    public String wind_sc;
+    public String wind_spd;
+
 
 }

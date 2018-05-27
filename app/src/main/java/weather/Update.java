@@ -1,4 +1,4 @@
-package com.example.dimension.netandlist;
+package weather;
 
 public class Update {
     public String loc;

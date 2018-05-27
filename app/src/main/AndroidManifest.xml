@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".Main2Activity" />
         <activity android:name=".Main3Activity" />
-        <activity android:name=".ImageActivity"></activity>
+        <activity android:name=".ImageActivity" />
+        <activity android:name=".WeatherActivity"></activity>
     </application>
 
 </manifest>

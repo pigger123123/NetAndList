@@ -1,4 +1,4 @@
-package com.example.dimension.netandlist;
+package weather;
 
 public class Weather {
     public Basic basic;
