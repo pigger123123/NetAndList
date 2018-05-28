@@ -5,7 +5,7 @@
 
 
     <Button
-        android:id="@+id/backset"
+        android:id="@+id/back_weather"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginLeft="15dp"
@@ -15,12 +15,11 @@
     </Button>
 
     <TextView
-        android:id="@+id/title_Text3"
+        android:id="@+id/title_weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
-        android:textColor="#ffffff"
-        android:text="天气"/>
+        android:textColor="#ffffff" />
 </RelativeLayout>

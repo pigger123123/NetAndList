@@ -43,7 +43,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                     Response response = new HttpResponseRequest().ReturnResponse("https://free-api.heweather.com/s6/weather/now?location=" + data + "&key=da3302c1f5c444b9b963ef6d0851d31f");
                     String weatherContent = response.body().string();
                     Weather weather = new parseWeatherJson().parseWeatherJSONWithGSON(weatherContent);
-                    response=new HttpResponseRequest().ReturnResponse("http://10.0.2.2/cond_icon_heweather/"+weather.now.cond_code+".png");
+                    response=new HttpResponseRequest().ReturnResponse("http://10,0,2,2/cond_icon_heweather/"+weather.now.cond_code+".png");
                     byte[] pic=response.body().bytes();
                     Bitmap bitmap=BitmapFactory.decodeByteArray(pic,0,pic.length);
                     show(weather,bitmap);
@@ -77,6 +77,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 LinearLayout linearLayout = (LinearLayout) Main2Activity.this.findViewById(R.id.MyTable);
                 ImageView[] imageViews = new ImageView[bitmaps.length];
 
@@ -92,7 +93,6 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                     imageViews[i].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
                             Intent intent = new Intent(Main2Activity.this, ImageActivity.class);
                             intent.putExtra("extra", data);
                             startActivity(intent);
@@ -141,27 +141,35 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        initWidget();
         Intent intent=getIntent();
         data=intent.getStringExtra("extra_data");
-        TextView textView=(TextView)findViewById(R.id.title_Text2);
-        textView.setText(data);
-        Image=findViewById(R.id.Image);
-        cityText=(TextView)findViewById(R.id.cityText);
-        foodText=(TextView)findViewById(R.id.foodText);
-        Button back=(Button)findViewById(R.id.back);
-        back.setOnClickListener(this);
         sendRequsetWithOkHttp();
-        Button refresh=(Button)findViewById(R.id.refresh);
-        refresh.setOnClickListener(this);
-        Button settings=(Button)findViewById(R.id.settings);
-        settings.setOnClickListener(this);
-        condTxt=(TextView)findViewById(R.id.condtxt);
-        tmp=(TextView)findViewById(R.id.tmp);
-        RelativeLayout relativeLayout=(RelativeLayout)findViewById(R.id.layout_weather);
-        relativeLayout.setOnClickListener(this);
+
 
     }
+    private void initWidget()
+    {
+        setContentView(R.layout.activity_main2);
+        Image=findViewById(R.id.Image);
+        cityText=findViewById(R.id.cityText);
+        foodText=findViewById(R.id.foodText);
+        Button back=findViewById(R.id.back);
+        back.setOnClickListener(this);
+        Button refresh=findViewById(R.id.refresh);
+        refresh.setOnClickListener(this);
+        Button settings=findViewById(R.id.settings);
+        settings.setOnClickListener(this);
+        condTxt=findViewById(R.id.condtxt);
+        tmp=findViewById(R.id.tmp);
+
+        RelativeLayout relativeLayout=findViewById(R.id.layout_weather);
+        relativeLayout.setOnClickListener(this);
+
+        TextView textView=(TextView)findViewById(R.id.title_Text2);
+        textView.setText(data);
+    }
+
 
     @Override
     public void onClick(View v) {

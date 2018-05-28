@@ -28,6 +28,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity{
     private ListView listView;
     final static String uri="http://10.0.2.2/";
+
     public void sendRequsetWithOkHttp()
     {
 
@@ -38,7 +39,6 @@ public class MainActivity extends AppCompatActivity{
                     Response response=new HttpResponseRequest().ReturnResponse(uri+"getdata.json");
                     String data=response.body().string();
                     parseCityJSONWithGSON(data);
-
                 }
                 catch (Exception e)
                 {
@@ -85,16 +85,19 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initWidget();
+        sendRequsetWithOkHttp();
+    }
+    private void initWidget()
+    {
         setContentView(R.layout.activity_main);
-        listView=(ListView)findViewById(R.id.listView);
-        Button power=(Button)findViewById(R.id.power);
+        listView=findViewById(R.id.listView);
+        Button power=findViewById(R.id.power);
         power.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        sendRequsetWithOkHttp();
     }
-
 }
