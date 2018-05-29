@@ -13,7 +13,7 @@ public class Main3Activity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.set);
-        Button back=(Button)findViewById(R.id.backset);
+        Button back=findViewById(R.id.backset);
         back.setOnClickListener(this);
         setListView(strings);
     }
@@ -31,7 +31,7 @@ public class Main3Activity extends AppCompatActivity implements View.OnClickList
     }
     private void setListView(String[] strings)
     {
-        ListView listView=(ListView)findViewById(R.id.listViewset);
+        ListView listView=findViewById(R.id.listViewset);
         ArrayAdapter<String> adapter=new ArrayAdapter<>(Main3Activity.this,android.R.layout.simple_list_item_1,strings);
         listView.setAdapter(adapter);
     }

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,12 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import okhttp3.Response;
 import weather.Weather;
@@ -40,13 +38,10 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
                 try {
-                    Response response = new HttpResponseRequest().ReturnResponse("https://free-api.heweather.com/s6/weather/now?location=" + data + "&key=da3302c1f5c444b9b963ef6d0851d31f");
+                    Response response= new HttpResponseRequest().ReturnResponse("https://free-api.heweather.com/s6/weather/now?location=" + data + "&key=da3302c1f5c444b9b963ef6d0851d31f");
                     String weatherContent = response.body().string();
                     Weather weather = new parseWeatherJson().parseWeatherJSONWithGSON(weatherContent);
-                    response=new HttpResponseRequest().ReturnResponse("http://10,0,2,2/cond_icon_heweather/"+weather.now.cond_code+".png");
-                    byte[] pic=response.body().bytes();
-                    Bitmap bitmap=BitmapFactory.decodeByteArray(pic,0,pic.length);
-                    show(weather,bitmap);
+                    show(weather,"http://10.0.2.2/cond_icon_heweather/"+weather.now.cond_code+".png");
 
                     response = new HttpResponseRequest().ReturnResponse(uri + data + "/cityintroduce.txt");
                     String cityText = response.body().string();
@@ -54,14 +49,11 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
                     response = new HttpResponseRequest().ReturnResponse(uri + data + "/total.txt");
                     int total = Integer.parseInt(response.body().string());
-                    Bitmap[] bitmaps = new Bitmap[total];
+                    String[] picPath=new String[total];
                     for (int i = 1; i <= total; i++) {
-                        response = new HttpResponseRequest().ReturnResponse(uri + data + "/resources/pic_" + i + ".jpg");
-                        pic = response.body().bytes();
-                        bitmap = BitmapFactory.decodeByteArray(pic, 0, pic.length);
-                        bitmaps[i - 1] = bitmap;
+                        picPath[i-1]=uri + data + "/resources/pic_" + i + ".jpg";
                     }
-                    show(bitmaps);
+                    show(picPath);
 
                     response = new HttpResponseRequest().ReturnResponse(uri + data + "/foods.txt");
                     String foodText = response.body().string();
@@ -73,28 +65,26 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         }).start();
     }
 
-    private void show(final Bitmap[] bitmaps) {
+    private void show(final String[] picPath) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 LinearLayout linearLayout = (LinearLayout) Main2Activity.this.findViewById(R.id.MyTable);
-                ImageView[] imageViews = new ImageView[bitmaps.length];
+                ImageView[] imageViews = new ImageView[picPath.length];
+                RequestOptions options = new RequestOptions().override(500).circleCrop();
 
-                for (int i = 0; i < bitmaps.length; i++) {
+                for (int i = 0; i < picPath.length; i++) {
                     imageViews[i] = new ImageView(Main2Activity.this);
-                    imageViews[i].setImageBitmap(bitmaps[i]);
-                    imageViews[i].setAdjustViewBounds(true);
-                    imageViews[i].setScaleType(ImageView.ScaleType.FIT_XY);
+                    Glide.with(Main2Activity.this).load(picPath[i]).apply(options).into(imageViews[i]);
                     linearLayout.addView(imageViews[i]);
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    bitmaps[i].compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                    final byte[] data = byteArrayOutputStream.toByteArray();
+
+                    final String temp=picPath[i];
                     imageViews[i].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(Main2Activity.this, ImageActivity.class);
-                            intent.putExtra("extra", data);
+                            intent.putExtra("extra", temp);
                             startActivity(intent);
                         }
                     });
@@ -122,14 +112,14 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-    private void show(final Weather weather,final Bitmap bitmap){
+    private void show(final Weather weather,final String path){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
               try{
                 tmp.setText(weather.now.tmp+"℃");
                 condTxt.setText(weather.now.cond_txt);
-                Image.setImageBitmap(bitmap);
+                Glide.with(getApplicationContext()).load(path).into(Image);
               }
                 catch (Exception e)
                 {
