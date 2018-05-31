@@ -49,7 +49,7 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         Image=findViewById(R.id.Image);
         cond_txt=findViewById(R.id.condtxt);
         tmp=findViewById(R.id.tmp);
-        back=findViewById(R.id.back);
+        back=findViewById(R.id.menu);
         wind_spd=findViewById(R.id.weather_wind_spd);
         vis=findViewById(R.id.weather_vis);
 
