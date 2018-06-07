@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +22,8 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
+import adapter.City;
+import adapter.CityAdapter;
 import okhttp3.Response;
 import weather.Weather;
 import weather.parseWeatherJson;
@@ -65,22 +66,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         Gson gson=new Gson();
         List<gson> gsonlist=gson.fromJson(data,new TypeToken<List<gson>>(){}.getType());
-        ArrayList<String> arrayList=new ArrayList<>();
+        List<City> cityList=new ArrayList<>();
         for(gson gson1:gsonlist) {
-            arrayList.add(gson1.getName());
+            City city=new City(gson1.getName());
+            cityList.add(city);
         }
-        String[] strings=new String[arrayList.size()];
-        arrayList.toArray(strings);
-        showCityList(strings);
+        showCityList(cityList);
     }
 
-    private void showCityList(final String[] Listdata)
+    private void showCityList(final List cityList)
     {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,Listdata);
-                SlidePanelListView.setAdapter(adapter);
+                CityAdapter cityAdapter=new CityAdapter(MainActivity.this,R.layout.city_item,cityList);
+                SlidePanelListView.setAdapter(cityAdapter);
                 SlidePanelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
