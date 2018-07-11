@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 catch (Exception e)
                 {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this,"Can't connect the Server!",0).show();
                 }
             }
         }).start();
